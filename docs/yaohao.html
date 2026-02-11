@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>双色球机选器</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            text-align: center;
+        }
+        h1 {
+            color: #e74c3c;
+        }
+        .ball-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .red-ball {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e74c3c;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 5px;
+            font-weight: bold;
+        }
+        .blue-ball {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #3498db;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 5px;
+            font-weight: bold;
+        }
+        button {
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #27ae60;
+        }
+        #result {
+            margin-top: 20px;
+            text-align: left;
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .copy-btn {
+            background-color: #9b59b6;
+        }
+        .copy-btn:hover {
+            background-color: #8e44ad;
+        }
+    </style>
+</head>
+<body>
+    <h1>双色球机选器</h1>
+    <p>点击下方按钮生成随机号码</p>
+    
+    <button onclick="generateNumbers()">生成号码</button>
+    <button class="copy-btn" onclick="copyResults()">复制结果</button>
+    
+    <div id="result">
+        <!-- 结果将在这里显示 -->
+    </div>
+
+    <script>
+        function generateNumbers() {
+            const redBalls = [];
+            const blueBall = Math.floor(Math.random() * 16) + 1;
+            
+            // 生成6个不重复的红球（1-33）
+            while (redBalls.length < 6) {
+                const num = Math.floor(Math.random() * 33) + 1;
+                if (!redBalls.includes(num)) {
+                    redBalls.push(num);
+                }
+            }
+            
+            // 排序红球
+            redBalls.sort((a, b) => a - b);
+            
+            // 显示结果
+            displayResults(redBalls, blueBall);
+        }
+        
+        function displayResults(redBalls, blueBall) {
+            const resultDiv = document.getElementById('result');
+            
+            // 清空之前的结果
+            resultDiv.innerHTML = '<h3>最新生成的号码：</h3>';
+            
+            // 显示红球
+            const redContainer = document.createElement('div');
+            redContainer.className = 'ball-container';
+            redBalls.forEach(num => {
+                const ball = document.createElement('div');
+                ball.className = 'red-ball';
+                ball.textContent = num.toString().padStart(2, '0');
+                redContainer.appendChild(ball);
+            });
+            resultDiv.appendChild(redContainer);
+            
+            // 显示蓝球
+            const blueContainer = document.createElement('div');
+            blueContainer.className = 'ball-container';
+            const blueBallElement = document.createElement('div');
+            blueBallElement.className = 'blue-ball';
+            blueBallElement.textContent = blueBall.toString().padStart(2, '0');
+            blueContainer.appendChild(blueBallElement);
+            resultDiv.appendChild(blueContainer);
+            
+            // 添加格式化文本
+            const textDiv = document.createElement('div');
+            textDiv.innerHTML = `<p><strong>红球：</strong>${redBalls.map(n => n.toString().padStart(2, '0')).join(' ')}</p>
+                                 <p><strong>蓝球：</strong>${blueBall.toString().padStart(2, '0')}</p>`;
+            resultDiv.appendChild(textDiv);
+        }
+        
+        function copyResults() {
+            const resultDiv = document.getElementById('result');
+            // 创建一个临时textarea元素来复制文本
+            const textarea = document.createElement('textarea');
+            textarea.value = resultDiv.innerText.replace('最新生成的号码：', '').trim();
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            
+            alert('结果已复制到剪贴板！');
+        }
+    </script>
+</body>
+</html>
