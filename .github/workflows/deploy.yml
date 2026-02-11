@@ -15,7 +15,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./  # 部署整个项目根目录
+          publish_dir: ./docs  # 部署整个项目根目录
           # 若需部署子目录（如 /docs），改为：
           # publish_dir: ./docs
           force_orphan: true  # 清空目标分支历史，避免冗余
